@@ -73,7 +73,6 @@ function renderHistory() {
       localStorage.setItem('theme', 'dark');
     }
   }
-  
   document.addEventListener('DOMContentLoaded', () => {
     const html = document.documentElement;
     const savedTheme = localStorage.getItem('theme');
@@ -93,8 +92,6 @@ function renderHistory() {
       switchInput.addEventListener('change', toggleTheme);
     }
   });
-  
-  
   
   // Render riwayat saat halaman dimuat
   window.onload = renderHistory;
