@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Summarizer</title>
+    <!-- Global Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS via CDN -->   
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script> 
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+      </style>
+  </head>
+  <body class="bg-gray-100 text-black dark:bg-[#3D211A] dark:text-white" style="font-family: 'Montserrat', sans-serif;">
+    <header class="bg-[#C2A77C] text-white py-4">
+      <h1 class="text-3xl font-bold text-center">AI Summarizer</h1>
+    </header>
+    <main class="max-w-6xl mx-auto p-6">
+      <p class="mb-6 text-lg"></p>
+      <!-- Container input dan tombol -->
+      <div class="flex flex-col sm:flex-row gap-6">
+        <div class="flex-1 flex flex-col relative">
+            <label for="inputText" class="mb-2 font-semibold">Teks Asli</label>
+            <textarea
+              id="inputText"
+              class="w-full h-64 p-4 border border-gray-300 rounded-lg dark:bg-[#492921] dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="10"
+              placeholder="Input your text here..."
+            ></textarea>
+            
+            <button
+            class="absolute bottom-3 right-3 px-4 py-2 bg-[#C2A77C] text-white rounded hover:bg-[#A07856] dark:bg-[#A07856] dark:hover:bg-[#6F4D38] transition"
+            onclick="ringkas()"
+          >
+            Summarize
+          </button>
+          <span class="material-symbols-outlined text-[#C2A77C] dark:text-[#A07856] cursor-pointer hover:text-[#A07856] dark:hover:text-[#6F4D38] absolute bottom-5 left-6" 
+          onclick="reset()">
+            delete
+            </span>
+        </div>
+
+        <div class="flex-1 flex flex-col relative">
+            <label for="summaryText" class="mb-2 font-semibold">Ringkasan</label>
+            <textarea
+              id="summaryText"
+              class="w-full h-64 p-4 border border-gray-300 rounded-lg bg-gray-100 dark:bg-[#492921] dark:text-white"
+              rows="10"
+              placeholder="Ringkasan akan muncul di sini..."
+              readonly
+            ></textarea>
+            <span class="material-symbols-outlined text-[#C2A77C] dark:text-[#A07856] cursor-pointer hover:text-[#A07856] dark:hover:text-[#6F4D38] absolute bottom-5 right-5" 
+            onclick="copyToClipboard()">
+              content_copy
+          </div>
+        </div>
+    
+        <div class="absolute top-20 right-20 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#C2A77C] dark:text-gray-400">light_mode</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="themeSwitch" class="sr-only peer" />
+            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:bg-[#6F4D38] transition"></div>
+            <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"></div>
+          </label>
+          <span class="material-symbols-outlined text-black dark:text-gray-400">dark_mode</span>
+        </div>        
+        
+      <!-- Fitur Tambahan: Riwayat Ringkasan -->
+      <section class="mt-8 bg-white dark:bg-[#492921] p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Your History</h2>
+        <ul
+          id="riwayatRingkasan"
+          class="list-disc list-inside text-gray-500 flex flex-col gap-[8px]"
+        >
+          <!-- Riwayat akan dirender secara dinamis -->
+        </ul>
+      </section>
+    </main>
+    <!-- <script>
+      // Fungsi untuk menampilkan ringkasan dan menambahkan ke riwayat
+      function ringkas() {
+        const input = document.getElementById("inputText").value.trim();
+        if (input === "") return;
+
+        // Simulasi ringkasan: output sama dengan input (karena belum terhubung ke model AI)
+        const summary = input;
+        document.getElementById("hasilRingkasan").innerText = summary;
+
+        // Simpan ringkasan ke localStorage dan render riwayat
+        let history = JSON.parse(localStorage.getItem("summaryHistory")) || [];
+        history.push(summary);
+        localStorage.setItem("summaryHistory", JSON.stringify(history));
+        renderHistory();
+      }
+
+      // Fungsi untuk mereset input dan hasil ringkasan
+      function reset() {
+        document.getElementById("inputText").value = "";
+        document.getElementById("hasilRingkasan").innerText =
+          "Hasil ringkasan teks akan muncul di sini setelah proses ringkasan selesai.";
+      }
+
+      // Fungsi untuk menghapus item riwayat berdasarkan index
+      function deleteHistory(index) {
+        let history = JSON.parse(localStorage.getItem("summaryHistory")) || [];
+        history.splice(index, 1);
+        localStorage.setItem("summaryHistory", JSON.stringify(history));
+        renderHistory();
+      }
+
+      // Fungsi untuk menampilkan riwayat ringkasan dan menambahkan delete button
+      function renderHistory() {
+        const riwayatList = document.getElementById("riwayatRingkasan");
+        riwayatList.innerHTML = "";
+        let history = JSON.parse(localStorage.getItem("summaryHistory")) || [];
+
+        // Jika tidak ada riwayat, tampilkan pesan
+        if (history.length === 0)
+          return (riwayatList.innerHTML =
+            "<p class='text-gray-700'>Tidak ada riwayat ringkasan.</p>");
+
+        history.forEach((item, index) => {
+          let li = document.createElement("li");
+          li.className = "flex justify-between items-center";
+          li.innerText = item;
+
+          // Tombol delete untuk tiap riwayat
+          let delBtn = document.createElement("button");
+          delBtn.innerText = "Delete";
+          delBtn.className =
+            "ml-4 px-2 py-1 bg-red-400 text-white rounded hover:bg-red-500 transition";
+          delBtn.onclick = function () {
+            deleteHistory(index);
+          };
+
+          li.appendChild(delBtn);
+          riwayatList.appendChild(li);
+        });
+      }
+
+      // Render riwayat saat halaman dimuat
+      window.onload = renderHistory;
+    </script> -->
+  </body>
+  <script src="main.js"></script>
+</html>

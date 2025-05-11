@@ -1,0 +1,36 @@
+/* Gaya dasar untuk seluruh halaman */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #F0E8BB;
+  }
+  /* Header utama */
+  header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  /* Gaya untuk textarea */
+  textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  /* Gaya untuk tombol */
+  button {
+    padding: 10px 20px;
+    background-color: #E1D2A6;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
+  /* Efek hover pada tombol */
+  button:hover {
+    background-color: #C2A77C;
+  }
