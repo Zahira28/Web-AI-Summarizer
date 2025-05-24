@@ -14,7 +14,7 @@ const Summarizer = ({
 }) => {
   return (
     <>
-      <p className="mb-4 text-lg">Masukkan teks untuk diringkas:</p>
+      <p className="mb-2 text-lg">Choose your AI:</p>
       <select
         value={model}
         onChange={(e) => setModel(e.target.value)}
